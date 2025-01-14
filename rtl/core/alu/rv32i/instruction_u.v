@@ -15,10 +15,10 @@ module instruction_u (
     assign oRD      = iIR[11:7];
     assign imm      = iIR[31:12];
 
-    assign alu_out = (opcode == {7'b0110111}) ? imm << 12    :          /* load upper immediate */
-                     (opcode == {7'h17}) ? iPC + (imm << 12) :          /* add upper immediate */
-                     32'h0;
+    assign alu_out  = (opcode == {7'b0110111}) ? imm << 12    :          /* load upper immediate */
+                      (opcode == {7'h17}) ? iPC + (imm << 12) :          /* add upper immediate */
+                      32'h0;
 
-    assign oREG_IN = alu_out;
+    assign oREG_IN  = alu_out;
     
 endmodule

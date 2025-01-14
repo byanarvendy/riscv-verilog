@@ -9,16 +9,15 @@ module instruction_j (
 );
 
     wire        [6:0]   opcode;
-    wire signed [19:0]  imm20;
     wire        [31:0]  imm;
     wire        [31:0]  jump;
 
     assign opcode   = iIR[6:0];
     assign oRD      = iIR[11:7];
 
-    assign imm = {{11{iIR[31]}}, iIR[31], iIR[19:12], iIR[20], iIR[30:21], 1'b0};
+    assign imm      = {{11{iIR[31]}}, iIR[31], iIR[19:12], iIR[20], iIR[30:21], 1'b0};
 
-    assign oREG_IN = iPC + 4;
-    assign oPCBR = iPC+ imm;
+    assign oREG_IN  = iPC + 4;
+    assign oPCBR    = iPC+ imm;
 
 endmodule

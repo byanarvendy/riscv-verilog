@@ -15,12 +15,13 @@ module memory_ram (
 	assign oRAM_DATA = (iRAM_CE && iRAM_RD) ? mem[iRAM_ADDR] : 32'h00000000;
 
 	initial begin
-		$readmemh("rtl/soc/ram/memory_ram_init.hex", mem, 0, 14);
+		$readmemh("rtl/soc/ram/memory_ram_init.hex", mem, 0, 255);
 	end
 
 	always @(posedge iRAM_CLK  or negedge iRAM_RST) begin
 		if (iRAM_WR) begin
 			mem[iRAM_ADDR] = iRAM_DATA;
+			// $writememh("rtl/soc/ram/memory_ram_init.hex", mem);
 		end
 	end
 
