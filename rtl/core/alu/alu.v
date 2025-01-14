@@ -5,6 +5,7 @@
 `include "rtl/core/alu/rv32i/instruction_b.v"
 `include "rtl/core/alu/rv32i/instruction_u.v"
 `include "rtl/core/alu/rv32i/instruction_j.v"
+`include "rtl/core/alu/rv32m.v"
 
 module alu (
     input           iCLK,
@@ -38,29 +39,31 @@ module alu (
     wire    [31:0]  ALU_IN1_S, ALU_IN2_S, ALU_OUT_S;
     wire    [4:0]   RS1_B, RS2_B;                           /* instruction b */
     wire    [31:0]  ALU_IN1_B, ALU_IN2_B;
-    wire    [4:0]   iRD_U, RD_J;                            /* instruction u & j*/
+    wire    [4:0]   RD_U, RD_J;                             /* instruction u & j*/
     wire    [31:0]  ALU_OUT_U, ALU_OUT_J;
+    wire    [4:0]   RD_M, RS1_M, RS2_M;                     /* rv32m multiply */
+    wire    [31:0]  ALU_IN1_M, ALU_IN2_M, ALU_OUT_M;
 
     instruction_mux u1 (
-        .OPCODE(OPCODE),
+        .iIR(IR), .OPCODE(OPCODE),
 
         .iRD_R(RD_R), .iRD_I(RD_I), .iRD_S(RD_S),
-        .iRD_U(RD_U), .iRD_J(RD_J),
+        .iRD_U(RD_U), .iRD_J(RD_J), .iRD_M(RD_M),
 
         .iRS1_R(RS1_R), .iRS1_I(RS1_I), .iRS1_S(RS1_S),
-        .iRS1_B(RS1_B),
+        .iRS1_B(RS1_B), .iRS1_M(RS1_M),
 
         .iRS2_R(RS2_R), .iRS2_I(RS2_I), .iRS2_S(RS2_S),
-        .iRS2_B(RS2_B),
+        .iRS2_B(RS2_B), .iRS2_M(RS2_M),
 
         .oALU_IN1_R(ALU_IN1_R), .oALU_IN1_I(ALU_IN1_I), .oALU_IN1_S(ALU_IN1_S),
-        .oALU_IN1_B(ALU_IN1_B),
+        .oALU_IN1_B(ALU_IN1_B), .oALU_IN1_M(ALU_IN1_M),
         
         .oALU_IN2_R(ALU_IN2_R), .oALU_IN2_I(ALU_IN2_I), .oALU_IN2_S(ALU_IN2_S), 
-        .oALU_IN2_B(ALU_IN2_B),
+        .oALU_IN2_B(ALU_IN2_B), .oALU_IN2_M(ALU_IN2_M),
 
         .iALU_OUT_R(ALU_OUT_R), .iALU_OUT_I(ALU_OUT_I), .iALU_OUT_S(ALU_OUT_S), 
-        .iALU_OUT_U(ALU_OUT_U), .iALU_OUT_J(ALU_OUT_J),
+        .iALU_OUT_U(ALU_OUT_U), .iALU_OUT_J(ALU_OUT_J), .iALU_OUT_M(ALU_OUT_M),
 
         .oRD(RD), .oRS1(RS1), .oRS2(RS2),
         .iALU_IN1(ALU_IN1), .iALU_IN2(ALU_IN2),
@@ -124,6 +127,14 @@ module alu (
     
         .oRD(RD_J), .oREG_IN(ALU_OUT_J),
         .oPCBR(BR_J)
+    );
+
+    rv32m_multiply u9 (
+        .iCLK(iCLK), .iIR(IR),
+
+        .iALU_IN1(ALU_IN1_M), .iALU_IN2(ALU_IN2_M),
+        .oRD(RD_M), .oRS1(RS1_M), .oRS2(RS2_M),
+        .oALU_OUT(ALU_OUT_M)
     );
 
 endmodule

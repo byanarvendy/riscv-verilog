@@ -112,12 +112,14 @@ module riscv_32i (
             $display("#clock: %0d", i);
             
             case (OPCODE)
-                7'b0110011:                         $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: R", PC, IR, OPCODE);      
-                7'b0010011, 7'b0000011, 7'b1100111: $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: I", PC, IR, OPCODE);
-                7'b0100011:                         $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: S", PC, IR, OPCODE);
-                7'b0110111, 7'b0010111:             $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: U", PC, IR, OPCODE);
-                7'b1100011:                         $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: B", PC, IR, OPCODE);
-                7'b1101111:                         $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: J", PC, IR, OPCODE);
+                7'b0110011:                               
+                    if (((IR[31:25] == 7'h00) | (IR[31:25] == 7'h20))) $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: R", PC, IR, OPCODE);
+                    else if ((IR[31:25] == 7'h01))                     $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, EXTENSION: RV32M", PC, IR, OPCODE);
+                7'b0010011, 7'b0000011, 7'b1100111:                    $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: I", PC, IR, OPCODE);
+                7'b0100011:                                            $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: S", PC, IR, OPCODE);
+                7'b0110111, 7'b0010111:                                $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: U", PC, IR, OPCODE);
+                7'b1100011:                                            $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: B", PC, IR, OPCODE);
+                7'b1101111:                                            $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: J", PC, IR, OPCODE);
             endcase
 
             if (OPCODE == 7'b0000011) begin

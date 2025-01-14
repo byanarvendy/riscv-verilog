@@ -14,6 +14,16 @@ _start:
     slt x9, x10, x11
     sltu x10, x11, x12
 
+    # mul
+    mul x1, x2, x3
+    mulh x5, x6, x7
+    # mulsu x3, x4, x5
+    # mulu x4, x6, x9
+    div x8, x9, x11
+    divu x5, x6, x7
+    rem x1, x2, x3
+    # remu x5, x6, x7
+
     # I-Type Instructions
     addi x1, x2, 3
     xori x2, x3, 4
