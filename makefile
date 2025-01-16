@@ -6,7 +6,7 @@ dir_code 	= code
 dir_mem 	= rtl/soc/rom
 
 # rtl
-top_level 			= riscv_32i
+top_level 			= riscv32_cpu
 top_level_tb 		= $(top_level)_tb
 simulation_tb 		= $(dir_sim)/$(top_level_tb)
 simulation_tb_vvp 	= $(simulation_tb).vvp

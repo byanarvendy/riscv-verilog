@@ -1,6 +1,6 @@
-`include "rtl/soc/soc_riscv_32i.v"
+`include "rtl/soc/soc_riscv32_cpu.v"
 
-module soc_riscv_32i_tb;
+module soc_riscv32_cpu_tb;
     reg iCLK, iRST;
 
     reg [1:0] MODE;
@@ -22,7 +22,7 @@ module soc_riscv_32i_tb;
         end
     end
 
-    soc_riscv_32i u1(
+    soc_riscv32_cpu u1(
         .iCLK(iCLK), .iRST(iRST),
         .iMODE(MODE), .iSW(SW),
         .oREG32(REG32)

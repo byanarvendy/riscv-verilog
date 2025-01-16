@@ -1,8 +1,8 @@
-`include "rtl/core/riscv_32i.v"
+`include "rtl/core/riscv32_cpu.v"
 `include "rtl/soc/rom/memory_rom.v"
 `include "rtl/soc/ram/memory_ram.v"
 
-module riscv_32i_tb;
+module riscv32_cpu_tb;
     reg         iRST, iCLK;
     reg  [1:0]  iMODE;
     reg  [7:0]  iSW;
@@ -36,7 +36,7 @@ module riscv_32i_tb;
 		end
     end
 
-    riscv_32i u1 (
+    riscv32_cpu u1 (
         .iRST(iRST), .iCLK(iCLK),
 
         .oROM_CE(oROM_CE), .oROM_RD(oROM_RD),

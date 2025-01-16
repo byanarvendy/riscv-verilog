@@ -42,21 +42,21 @@ module instruction_s (
 
     assign ram_data_rd  = iRAM_DATA;
 
-    assign ram_data_byte_wr = (ram_address[1:0] == 2'b00) ? (alu_in2[7:0] | (ram_data_rd & 32'hffffff00)) :
-                              (ram_address[1:0] == 2'b01) ? ((alu_in2[7:0] << 8) | (ram_data_rd & 32'hffff00ff)) :
-                              (ram_address[1:0] == 2'b10) ? ((alu_in2[7:0] << 16) | (ram_data_rd & 32'hff00ffff)) :
-                              (ram_address[1:0] == 2'b11) ? ((alu_in2[7:0] << 24) | (ram_data_rd & 32'h00ffffff)) :
+    assign ram_data_byte_wr = (ram_address[1:0] == 2'b00) ? (alu_in2[7:0]           | (ram_data_rd & 32'hffffff00)) :
+                              (ram_address[1:0] == 2'b01) ? ((alu_in2[7:0] << 8)    | (ram_data_rd & 32'hffff00ff)) :
+                              (ram_address[1:0] == 2'b10) ? ((alu_in2[7:0] << 16)   | (ram_data_rd & 32'hff00ffff)) :
+                              (ram_address[1:0] == 2'b11) ? ((alu_in2[7:0] << 24)   | (ram_data_rd & 32'h00ffffff)) :
                               32'h00;
     
-    assign ram_data_half_wr = (ram_address[1] == 1'b0) ? ((alu_in2[15:0]) | (ram_data_rd & 32'hffff0000)) :
-                              (ram_address[1] == 1'b1) ? ((alu_in2[15:0] << 16) | (ram_data_rd & 32'h0000ffff)) :
+    assign ram_data_half_wr = (ram_address[1] == 1'b0) ? ((alu_in2[15:0])           | (ram_data_rd & 32'hffff0000)) :
+                              (ram_address[1] == 1'b1) ? ((alu_in2[15:0] << 16)     | (ram_data_rd & 32'h0000ffff)) :
                               32'h00;
 
     assign ram_data_word_wr = alu_in2;
 
-    assign oRAM_DATA    = (func3 == {3'h0}) ? ram_data_byte_wr :       /* store byte */
-                          (func3 == {3'h1}) ? ram_data_half_wr :       /* store half */
-                          (func3 == {3'h2}) ? ram_data_word_wr :       /* store word */
+    assign oRAM_DATA    = (func3 == 3'h0) ? ram_data_byte_wr :       /* store byte */
+                          (func3 == 3'h1) ? ram_data_half_wr :       /* store half */
+                          (func3 == 3'h2) ? ram_data_word_wr :       /* store word */
                           32'h00000000;
 
     assign oREG_IN      = 32'h00;

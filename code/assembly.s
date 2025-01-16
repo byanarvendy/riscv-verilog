@@ -57,6 +57,17 @@ _start:
     sw x5, 8(x0)
     lw x8, 8(x0)
 
+    # atomic
+    # lr.w x1, (x2)
+    # sc.w x3, x4, (x2)
+    # amoswap.w x1, x3, (x2)
+    # amoadd.w x3, x4, (x3)
+    # amoand.w x4, x5, (x4)
+    # amoor.w x5, x6, (x5)
+    # amoxor.w x6, x7, (x6)
+    # amomax.w x7, x8, (x7)
+    # amomin.w x8, x9, (x8)
+
     # Branch Instructions
     beq x1, x2, 12
     bne x1, x2, 16

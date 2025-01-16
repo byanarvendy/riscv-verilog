@@ -1,8 +1,9 @@
 `include "rtl/core/register_file.v"
 `include "rtl/core/alu/alu.v"
 `include "rtl/soc/ram/ram_mux.v"
+`include "rtl/core/alu/opcode_r_m.v"
 
-module riscv_32i (
+module riscv32_cpu (
     input           iRST,
     input           iCLK,
 
@@ -53,9 +54,16 @@ module riscv_32i (
     wire            RAM_CE_S, RAM_RD_S, RAM_WR_S;       /* instrucion s */
     wire    [31:0]  RAM_DATA_WR_S, RAM_DATA_RD_S;
     wire    [7:0]   RAM_ADDR_S;
+    wire            RAM_CE_A, RAM_RD_A, RAM_WR_A;       /* extension a */
+    wire    [31:0]  RAM_DATA_WR_A, RAM_DATA_RD_A;
+    wire    [7:0]   RAM_ADDR_A;
 
     assign oRAM_WR = RAM_WR;
 	assign oRAM_RD = RAM_RD;
+
+    /* mux opcode r m*/
+    wire   opcode_r_m;
+    assign opcode_r_m = opcode_r_m_module.opcode_r_m(IR);
 
     register_file u1 (
         .iCLK(iCLK), .iRST(iRST),
@@ -78,7 +86,10 @@ module riscv_32i (
         .RAM_CE_S(RAM_CE_S), .RAM_RD_S(RAM_RD_S), .RAM_WR_S(RAM_WR_S),
         .RAM_ADDR_S(RAM_ADDR_S), .RAM_DATA_WR_S(RAM_DATA_WR_S),
 
-        .RAM_DATA_RD_I(iRAM_DATA), .RAM_DATA_RD_S(iRAM_DATA),
+        .RAM_CE_A(RAM_CE_A), .RAM_RD_A(RAM_RD_A), .RAM_WR_A(RAM_WR_A),
+        .RAM_ADDR_A(RAM_ADDR_A), .RAM_DATA_WR_A(RAM_DATA_WR_A),
+
+        .RAM_DATA_RD_I(iRAM_DATA), .RAM_DATA_RD_S(iRAM_DATA), .RAM_DATA_RD_A(iRAM_DATA),
         .oRAM_DATA(oRAM_DATA)
     );
 
@@ -92,6 +103,10 @@ module riscv_32i (
         .iRAM_CE_S(RAM_CE_S), .iRAM_RD_S(RAM_RD_S), .iRAM_WR_S(RAM_WR_S),
         .iRAM_ADDR_S(RAM_ADDR_S), .iRAM_DATA_WR_S(RAM_DATA_WR_S),
         .oRAM_DATA_RD_S(RAM_DATA_RD_S),
+
+        .iRAM_CE_A(RAM_CE_A), .iRAM_RD_A(RAM_RD_A), .iRAM_WR_A(RAM_WR_A),
+        .iRAM_ADDR_A(RAM_ADDR_A), .iRAM_DATA_WR_A(RAM_DATA_WR_A),
+        .oRAM_DATA_RD_A(RAM_DATA_RD_A),
 
         .oRAM_CE(oRAM_CE), .oRAM_RD(oRAM_RD), .oRAM_WR(oRAM_WR),
         .oRAM_ADDR(oRAM_ADDR), .oRAM_DATA_WR(oRAM_DATA),
@@ -113,13 +128,14 @@ module riscv_32i (
             
             case (OPCODE)
                 7'b0110011:                               
-                    if (((IR[31:25] == 7'h00) | (IR[31:25] == 7'h20))) $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: R", PC, IR, OPCODE);
-                    else if ((IR[31:25] == 7'h01))                     $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, EXTENSION: RV32M", PC, IR, OPCODE);
-                7'b0010011, 7'b0000011, 7'b1100111:                    $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: I", PC, IR, OPCODE);
-                7'b0100011:                                            $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: S", PC, IR, OPCODE);
-                7'b0110111, 7'b0010111:                                $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: U", PC, IR, OPCODE);
-                7'b1100011:                                            $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: B", PC, IR, OPCODE);
-                7'b1101111:                                            $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: J", PC, IR, OPCODE);
+                    if (opcode_r_m == 1'b0)             $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: R", PC, IR, OPCODE);
+                    else if (opcode_r_m == 1'b1)        $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, EXTENSION TYPE: RV32M", PC, IR, OPCODE);                  
+                7'b0010011, 7'b0000011, 7'b1100111:     $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: I", PC, IR, OPCODE);
+                7'b0100011:                             $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: S", PC, IR, OPCODE);
+                7'b0110111, 7'b0010111:                 $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: U", PC, IR, OPCODE);
+                7'b1100011:                             $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: B", PC, IR, OPCODE);
+                7'b1101111:                             $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: J", PC, IR, OPCODE);
+                7'b0101111:                             $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, EXTENSION TYPE: RV32A", PC, IR, OPCODE);  
             endcase
 
             if (OPCODE == 7'b0000011) begin
@@ -127,6 +143,9 @@ module riscv_32i (
             end 
             else if (OPCODE == 7'b0100011) begin
                 RAM_WR = 1; RAM_RD = 0;
+            end
+            else if (OPCODE == 7'b0101111) begin
+                RAM_WR = 1; RAM_RD = 1;
             end
 
             PC <= (OPCODE == 7'b1100011) ? (BR_B) : 

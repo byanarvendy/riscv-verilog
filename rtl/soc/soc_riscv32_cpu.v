@@ -1,8 +1,8 @@
-`include "rtl/core/riscv_32i.v"
+`include "rtl/core/riscv32_cpu.v"
 `include "rtl/soc/rom/memory_rom.v"
 `include "rtl/soc/ram/memory_ram.v"
 
-module soc_riscv_32i (
+module soc_riscv32_cpu (
     input           iCLK,
     input           iRST,
 
@@ -38,7 +38,7 @@ module soc_riscv_32i (
         .oRAM_DATA(RAM_READ_DATA), .iRAM_DATA(RAM_WRITE_DATA)
     );
 
-    riscv_32i u3(
+    riscv32_cpu u3(
         .iCLK(iCLK), .iRST(iRST),
 
         .oROM_CE(ROM_CE), .oROM_RD(ROM_RD),
