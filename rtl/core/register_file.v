@@ -1,11 +1,15 @@
 module register_file (
     input           iCLK,
     input           iRST,
+
     input   [4:0]   iRD,
     input   [4:0]   iRS1,
     input   [4:0]   iRS2,
+    input   [4:0]   iRS3,
+
     output  [31:0]  oALU_IN1,
     output  [31:0]  oALU_IN2,
+    output  [31:0]  oALU_IN3,
     input   [31:0]  iALU_OUT
 );
 
@@ -15,6 +19,7 @@ module register_file (
 
     assign oALU_IN1 = regfile[iRS1];
     assign oALU_IN2 = regfile[iRS2];
+    assign oALU_IN3 = regfile[iRS3];
 
     initial begin
         for (i = 0; i < 32; i = i + 1) begin

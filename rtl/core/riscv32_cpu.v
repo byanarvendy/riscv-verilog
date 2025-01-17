@@ -29,8 +29,8 @@ module riscv32_cpu (
     reg             RAM_WR, RAM_RD;
 
     /* register file */
-    wire    [4:0]   RD, RS1, RS2;
-    wire    [31:0]  ALU_IN1, ALU_IN2, ALU_OUT;
+    wire    [4:0]   RD, RS1, RS2, RS3;
+    wire    [31:0]  ALU_IN1, ALU_IN2, ALU_IN3, ALU_OUT;
 
     /* branch */
     wire    [31:0]  BR_B, BR_J, BR_I;
@@ -57,28 +57,34 @@ module riscv32_cpu (
     wire            RAM_CE_A, RAM_RD_A, RAM_WR_A;       /* extension a */
     wire    [31:0]  RAM_DATA_WR_A, RAM_DATA_RD_A;
     wire    [7:0]   RAM_ADDR_A;
+    wire            RAM_CE_F, RAM_RD_F, RAM_WR_F;       /* extension f */
+    wire    [31:0]  RAM_DATA_WR_F, RAM_DATA_RD_F;
+    wire    [7:0]   RAM_ADDR_F;
 
     assign oRAM_WR = RAM_WR;
 	assign oRAM_RD = RAM_RD;
 
     /* mux opcode r m*/
-    wire   opcode_r_m;
-    assign opcode_r_m = opcode_r_m_module.opcode_r_m(IR);
+    wire   OPCODE_R_M;
+    assign OPCODE_R_M = opcode_r_m_module.opcode_r_m(IR);
 
     register_file u1 (
         .iCLK(iCLK), .iRST(iRST),
 
-        .iRD(RD), .iRS1(RS1), .iRS2(RS2),
-        .oALU_IN1(ALU_IN1), .oALU_IN2(ALU_IN2), .iALU_OUT(ALU_OUT)
+        .iRD(RD), .iRS1(RS1), .iRS2(RS2), .iRS3(RS3),
+        .oALU_IN1(ALU_IN1), .oALU_IN2(ALU_IN2), .oALU_IN3(ALU_IN3), .iALU_OUT(ALU_OUT)
     );
         
     alu u2 (
-        .iCLK(iCLK), .iRST(iRST), .OPCODE(OPCODE), .IR(iROM_DATA),
+        .iCLK(iCLK), .iRST(iRST), 
+        .PC(PC), .OPCODE(OPCODE), .IR(iROM_DATA),
 
-        .ALU_IN1(ALU_IN1), .ALU_IN2(ALU_IN2), .PC(PC),
-        .ALU_OUT(ALU_OUT), .BR_B(BR_B), .BR_J(BR_J), .BR_I(BR_I),
+        .ALU_IN1(ALU_IN1), .ALU_IN2(ALU_IN2), .ALU_IN3(ALU_IN3), 
+        .ALU_OUT(ALU_OUT), 
+        
+        .BR_B(BR_B), .BR_J(BR_J), .BR_I(BR_I),
 
-        .RD(RD), .RS1(RS1), .RS2(RS2),
+        .RD(RD), .RS1(RS1), .RS2(RS2), .RS3(RS3),
 
         .RAM_CE_I(RAM_CE_I), .RAM_RD_I(RAM_RD_I), .RAM_WR_I(RAM_WR_I),
         .RAM_ADDR_I(RAM_ADDR_I), .RAM_DATA_WR_I(RAM_DATA_WR_I),
@@ -89,12 +95,15 @@ module riscv32_cpu (
         .RAM_CE_A(RAM_CE_A), .RAM_RD_A(RAM_RD_A), .RAM_WR_A(RAM_WR_A),
         .RAM_ADDR_A(RAM_ADDR_A), .RAM_DATA_WR_A(RAM_DATA_WR_A),
 
-        .RAM_DATA_RD_I(iRAM_DATA), .RAM_DATA_RD_S(iRAM_DATA), .RAM_DATA_RD_A(iRAM_DATA),
+        .RAM_CE_F(RAM_CE_F), .RAM_RD_F(RAM_RD_F), .RAM_WR_F(RAM_WR_F),
+        .RAM_ADDR_F(RAM_ADDR_F), .RAM_DATA_WR_F(RAM_DATA_WR_F),
+
+        .RAM_DATA_RD_I(iRAM_DATA), .RAM_DATA_RD_S(iRAM_DATA), .RAM_DATA_RD_A(iRAM_DATA), .RAM_DATA_RD_F(iRAM_DATA),
         .oRAM_DATA(oRAM_DATA)
     );
 
     ram_mux u3 (
-        .OPCODE(OPCODE),
+        .iCLK(iCLK), .OPCODE(OPCODE),
 
         .iRAM_CE_I(RAM_CE_I), .iRAM_RD_I(RAM_RD_I), .iRAM_WR_I(RAM_WR_I),
         .iRAM_ADDR_I(RAM_ADDR_I), .iRAM_DATA_WR_I(RAM_DATA_WR_I),
@@ -107,6 +116,10 @@ module riscv32_cpu (
         .iRAM_CE_A(RAM_CE_A), .iRAM_RD_A(RAM_RD_A), .iRAM_WR_A(RAM_WR_A),
         .iRAM_ADDR_A(RAM_ADDR_A), .iRAM_DATA_WR_A(RAM_DATA_WR_A),
         .oRAM_DATA_RD_A(RAM_DATA_RD_A),
+
+        .iRAM_CE_F(RAM_CE_F), .iRAM_RD_F(RAM_RD_F), .iRAM_WR_F(RAM_WR_F),
+        .iRAM_ADDR_F(RAM_ADDR_F), .iRAM_DATA_WR_F(RAM_DATA_WR_F),
+        .oRAM_DATA_RD_F(RAM_DATA_RD_F),
 
         .oRAM_CE(oRAM_CE), .oRAM_RD(oRAM_RD), .oRAM_WR(oRAM_WR),
         .oRAM_ADDR(oRAM_ADDR), .oRAM_DATA_WR(oRAM_DATA),
@@ -128,14 +141,16 @@ module riscv32_cpu (
             
             case (OPCODE)
                 7'b0110011:                               
-                    if (opcode_r_m == 1'b0)             $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: R", PC, IR, OPCODE);
-                    else if (opcode_r_m == 1'b1)        $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, EXTENSION TYPE: RV32M", PC, IR, OPCODE);                  
+                    if (OPCODE_R_M == 1'b0)             $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: R", PC, IR, OPCODE);
+                    else if (OPCODE_R_M == 1'b1)        $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, EXTENSION TYPE: RV32M", PC, IR, OPCODE);                  
                 7'b0010011, 7'b0000011, 7'b1100111:     $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: I", PC, IR, OPCODE);
                 7'b0100011:                             $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: S", PC, IR, OPCODE);
                 7'b0110111, 7'b0010111:                 $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: U", PC, IR, OPCODE);
                 7'b1100011:                             $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: B", PC, IR, OPCODE);
                 7'b1101111:                             $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, INSTRUCTION TYPE: J", PC, IR, OPCODE);
-                7'b0101111:                             $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, EXTENSION TYPE: RV32A", PC, IR, OPCODE);  
+                7'b0101111:                             $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, EXTENSION TYPE: RV32A", PC, IR, OPCODE);
+                7'b0000111, 7'b0100111, 7'b1000011, 7'b1000111, 
+                7'b1001011, 7'b1001111, 7'b1010011:     $display("#PC: 0x%x, IR: 0x%x, OPCODE: 0x%x, EXTENSION TYPE: RV32F", PC, IR, OPCODE);
             endcase
 
             if (OPCODE == 7'b0000011) begin
@@ -144,7 +159,7 @@ module riscv32_cpu (
             else if (OPCODE == 7'b0100011) begin
                 RAM_WR = 1; RAM_RD = 0;
             end
-            else if (OPCODE == 7'b0101111) begin
+            else if ((OPCODE == 7'b0101111) || (OPCODE == 7'b0000111) || (OPCODE == 7'b0100111)) begin
                 RAM_WR = 1; RAM_RD = 1;
             end
 
