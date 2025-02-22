@@ -42,6 +42,18 @@ module rv32f_floating (
     assign OFFSET7      = iIR[31:25];
     assign OFFSET5      = oRD;
 
+
+    /* f opcode */
+    reg    F_OPCODE;
+    always @(posedge iCLK) begin
+        case (OPCODE)
+            7'b0000111, 7'b0100111, 7'b1000011, 7'b1000111, 7'b1001011, 7'b1001111, 7'b1010011: 
+                F_OPCODE = 1'b1;
+            default: F_OPCODE = 1'b0;
+        endcase
+    end
+
+
     /* ram */
     assign RAM_ADDRESS  = (OPCODE == 7'b0000111) ? iALU_IN1 + OFFSET12 :
                           (OPCODE == 7'b0100111) ? iALU_IN1 + OFFSET7  :
@@ -101,5 +113,17 @@ module rv32f_floating (
 
     /* singe-precision store */
     assign oRAM_DATA    = (OPCODE == 7'b0100111) ? iALU_IN2 : 32'h0;                                                        /* float store word */
+
+
+    /* DEBUG */
+    always @(posedge iCLK) begin
+        if ((OPCODE == 7'b0000111) || (F_OPCODE == 1'b1)) begin
+            $display("INSTRUCTION F -> oRD: 0x%x, oRS1: 0x%x, oRS2: 0x%x, oRS3: 0x%x, oALU_OUT: 0x%x", oRD, oRS1, oRS2, oRS3, oALU_OUT);
+            $display("INSTRUCTION F -> iALU_IN1: 0x%x, iALU_IN2: 0x%x, iALU_IN3: 0x%x", iALU_IN1, iALU_IN2, iALU_IN3);
+            $display("INSTRUCTION F -> oRAM_CE: 0x%x, oRAM_RD: 0x%x, oRAM_WR: 0x%x, oRAM_ADDR: 0x%x", oRAM_CE, oRAM_RD, oRAM_WR, oRAM_ADDR);
+            $display("INSTRUCTION F -> iRAM_DATA: 0x%x, oRAM_DATA: 0x%x", iRAM_DATA, oRAM_DATA);
+        end
+    end
+
 
 endmodule

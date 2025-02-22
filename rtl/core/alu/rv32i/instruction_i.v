@@ -81,4 +81,14 @@ module instruction_i (
     assign oRAM_CE  = (opcode == 7'b0000011) ? 1'b1 : 1'b0;
     assign oRAM_RD  = (opcode == 7'b0000011) ? 1'b1 : 1'b0;
 
+
+    /* DEBUG */
+    always @(posedge iCLK) begin
+        if (opcode == 7'b0010011 || opcode == 7'b0000011 || opcode == 7'b1100111) begin
+            $display("INSTRUCTION I -> oRD: 0x%x, oRS1: 0x%x, oRS2: 0x%x, oREG_IN: 0x%x, oPC: 0x%x", oRD, oRS1, oRS2, oREG_IN, oPC);
+            $display("INSTRUCTION I -> iREG_OUT1: 0x%x, iREG_OUT2: 0x%x, iPC: 0x%x", iREG_OUT1, iREG_OUT2, iPC);
+            $display("INSTRUCTION I -> oRAM_CE: 0x%x, oRAM_RD: 0x%x, oRAM_WR: 0x%x, oRAM_ADDR: 0x%x, iRAM_DATA: 0x%x", oRAM_CE, oRAM_RD, oRAM_WR, oRAM_ADDR, iRAM_DATA);
+        end
+    end
+
 endmodule

@@ -14,6 +14,12 @@ module instruction_r (
     wire    [9:0]   func37;
     wire    [31:0]  alu_in1, alu_in2, alu_out;
 
+
+    /* mux opcode r m */
+    wire   OPCODE_R_M;
+    assign OPCODE_R_M = opcode_r_m_module.opcode_r_m(iIR);
+
+
     assign oRD      = iIR[11:7];
     assign oRS1     = iIR[19:15];
     assign oRS2     = iIR[24:20];
@@ -38,5 +44,15 @@ module instruction_r (
                       32'h00000000;
                    
     assign oALU_OUT = alu_out;
+
+
+    /* DEBUG */
+    always @(posedge iCLK) begin
+        if ((iIR[6:0] == 7'b0110011) && (OPCODE_R_M == 1'b0)) begin
+            $display("INSTRUCTION R -> oRD: 0x%x, oRS1: 0x%x, oRS2: 0x%x, oALU_OUT: 0x%x", oRD, oRS1, oRS2, oALU_OUT);
+            $display("INSTRUCTION R -> iALU_IN1: 0x%x, iALU_IN2: 0x%x", iALU_IN1, iALU_IN2);
+        end
+    end
+
 
 endmodule
