@@ -20,4 +20,13 @@ module instruction_j (
     assign oREG_IN  = iPC + 4;
     assign oPCBR    = iPC+ imm;
 
+    
+    /* DEBUG */
+    always @(posedge iCLK) begin
+        if (opcode== 7'b1101111) begin
+            $display("INSTRUCTION J -> iPC: 0x%x, oRD: 0x%x, oREG_IN: 0x%x, oPCBR: 0x%x", iPC, oRD, oREG_IN, oPCBR);
+        end
+    end
+
+
 endmodule

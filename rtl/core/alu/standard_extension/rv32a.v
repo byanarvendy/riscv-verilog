@@ -83,6 +83,17 @@ module rv32a_atomic (
             5'h01, 5'h00, 5'h0C, 5'h0A, 5'h04, 5'h14, 5'h10: rd_ram = 1'b1;
             default: rd_ram = 1'b0;
         endcase
+
+
+        /* DEBUG */
+        if (iIR[6:0] == 7'b0101111) begin
+            $display("INSTRUCTION A -> oRD: 0x%x, oRS1: 0x%x, oRS2: 0x%x, oALU_OUT: 0x%x", oRD, oRS1, oRS2, oALU_OUT);
+            $display("INSTRUCTION A -> iALU_IN1: 0x%x, iALU_IN2: 0x%x", iALU_IN1, iALU_IN2);
+            $display("INSTRUCTION A -> oRAM_CE: 0x%x, oRAM_RD: 0x%x, oRAM_WR: 0x%x, oRAM_ADDR: 0x%x", oRAM_CE, oRAM_RD, oRAM_WR, oRAM_ADDR);
+            $display("INSTRUCTION A -> iRAM_DATA: 0x%x, oRAM_DATA: 0x%x", iRAM_DATA, oRAM_DATA);
+        end
+
+
     end
 
 endmodule

@@ -37,7 +37,7 @@ gtk:
 	gtkwave -f $(simulation_tb_vcd)
 
 $(ass_hex): $(ass_src)
-	$(RISCV_AS) -o $(ass_obj) $<
+	$(RISCV_AS) -march=rv64imcf_zca -o $(ass_obj) $<
 	$(RISCV_LD) -o $(ass_elf) $(ass_obj)
 	$(RISCV_OBJCOPY) -O binary $(ass_elf) $(ass_bin)
 	$(HEXDUMP) -v -e '1/4 "%08x\n"' $(ass_bin) > $@

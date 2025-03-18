@@ -34,5 +34,15 @@ module instruction_b (
                       32'h0;
 
 	assign oPCBR    = alu_out;
+
+
+    /* DEBUG */
+    always @(posedge iCLK) begin
+        if (iIR[6:0] == 7'b1100011) begin
+            $display("INSTRUCTION B -> oRS1: 0x%x, oRS2: 0x%x, oPCBR: 0x%x", oRS1, oRS2, oPCBR);
+            $display("INSTRUCTION B -> iREG_OUT1: 0x%x, iREG_OUT2: 0x%x", iREG_OUT1, iREG_OUT2);
+        end
+    end
+
     
 endmodule

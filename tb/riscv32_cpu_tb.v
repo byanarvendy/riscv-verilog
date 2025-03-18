@@ -30,7 +30,7 @@ module riscv32_cpu_tb;
         iRAM_RD = 1;
         iRAM_WR = 0;
 
-		for (i = 0; i < 5; i = i +1 ) begin
+		for (i = 0; i < 51; i = i +1 ) begin
             #5 iCLK = 0;
             #5 iCLK = 1;
 		end
