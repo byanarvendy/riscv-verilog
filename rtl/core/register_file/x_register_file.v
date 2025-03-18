@@ -1,4 +1,4 @@
-module register_file (
+module x_register_file (
     input           iCLK,
     input           iRST,
 
@@ -36,9 +36,9 @@ module register_file (
             regfile[iRD] = iALU_OUT;
         end
 
-        $display("#REGISTERS:");
+        $display("===== BASE REGISTERS =====");
         for (i = 0; i < 32; i = i + 8) begin
-            $display("#REG: [0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x]", regfile[i+0], regfile[i+1], regfile[i+2], regfile[i+3], regfile[i+4], regfile[i+5], regfile[i+6], regfile[i+7]);
+            $display("#XRF: [%16d %16d %16d %16d %16d %16d %16d %16d]", regfile[i+0], regfile[i+1], regfile[i+2], regfile[i+3], regfile[i+4], regfile[i+5], regfile[i+6], regfile[i+7]);
         end
 
     end

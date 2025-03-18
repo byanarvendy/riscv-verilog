@@ -19,13 +19,15 @@ module alu (
     input   [6:0]   OPCODE,
     input   [7:0]   PC,
     input   [31:0]  IR,
-    input   [31:0]  ALU_IN1, ALU_IN2, ALU_IN3,
+    input   [31:0]  X_ALU_IN1, X_ALU_IN2,
+    input   [31:0]  F_ALU_IN1, F_ALU_IN2, F_ALU_IN3,
 
-    output  [31:0]  ALU_OUT,
+    output  [31:0]  X_ALU_OUT, F_ALU_OUT,
     output  [31:0]  BR_B, BR_J, BR_I,
 
     /* register */
-    output  [4:0]   RD, RS1, RS2, RS3,
+    output  [4:0]   X_RD, X_RS1, X_RS2,
+    output  [4:0]   F_RD, F_RS1, F_RS2, F_RS3,
 
     /* ram */
     output          RAM_CE_I, RAM_RD_I, RAM_WR_I,
@@ -37,8 +39,8 @@ module alu (
     input   [31:0]  RAM_DATA_RD_I, RAM_DATA_RD_S, RAM_DATA_RD_A, RAM_DATA_RD_F
 );
 
-    wire    [4:0]   RD, RS1, RS2;                                   /* register file */
-    wire    [31:0]  ALU_IN1, ALU_IN2, ALU_OUT;
+    wire    [4:0]   RD, RS1, RS2, RS3;                                   /* register file */
+    wire    [31:0]  ALU_IN1, ALU_IN2, ALU_IN3, ALU_OUT;
 
     /* rv32i */
     wire    [4:0]   RD_R, RS1_R, RS2_R;                             /* instruction r */
@@ -46,7 +48,7 @@ module alu (
     wire    [4:0]   RD_I, RS1_I, RS2_I;                             /* instruction i */
     wire    [31:0]  ALU_IN1_I, ALU_IN2_I, ALU_OUT_I;
     wire    [4:0]   RD_S, RS1_S, RS2_S;                             /* instruction s */
-    wire    [31:0]  ALU_IN1_S, ALU_IN2_S, ALU_OUT_S, oRAM_DATA_S;
+    wire    [31:0]  ALU_IN1_S, ALU_IN2_S, ALU_OUT_S;
     wire    [4:0]   RS1_B, RS2_B;                                   /* instruction b */
     wire    [31:0]  ALU_IN1_B, ALU_IN2_B;
     wire    [4:0]   RD_U, RD_J;                                     /* instruction u & j*/
@@ -56,9 +58,9 @@ module alu (
     wire    [4:0]   RD_M, RS1_M, RS2_M;                             /* rv32m multiply */
     wire    [31:0]  ALU_IN1_M, ALU_IN2_M, ALU_OUT_M;
     wire    [4:0]   RD_A, RS1_A, RS2_A;                             /* rv32a atomic */
-    wire    [31:0]  ALU_IN1_A, ALU_IN2_A, ALU_OUT_A, oRAM_DATA_A;
-    wire    [4:0]   RD_F, RS1_F, RS2_F, RS3_F;                      /* rv32f float */
-    wire    [31:0]  ALU_IN1_F, ALU_IN2_F, ALU_IN3_F, ALU_OUT_F, oRAM_DATA_F;
+    wire    [31:0]  ALU_IN1_A, ALU_IN2_A, ALU_OUT_A;
+    wire    [4:0]   RD_F, RS1_F;                                    /* rv32f float */
+    wire    [31:0]  ALU_IN1_F, ALU_OUT_F;
 
     instruction_mux u1 (
         .iCLK(iCLK),
@@ -71,25 +73,20 @@ module alu (
         .iRS1_M(RS1_M), .iRS1_A(RS1_A), .iRS1_F(RS1_F),
 
         .iRS2_R(RS2_R), .iRS2_I(RS2_I), .iRS2_S(RS2_S), .iRS2_B(RS2_B),
-        .iRS2_M(RS2_M), .iRS2_A(RS2_A), .iRS2_F(RS2_F),
-
-        .iRS3_F(RS3_F),
+        .iRS2_M(RS2_M), .iRS2_A(RS2_A),
 
         .oALU_IN1_R(ALU_IN1_R), .oALU_IN1_I(ALU_IN1_I), .oALU_IN1_S(ALU_IN1_S), .oALU_IN1_B(ALU_IN1_B),
         .oALU_IN1_M(ALU_IN1_M), .oALU_IN1_A(ALU_IN1_A), .oALU_IN1_F(ALU_IN1_F),
         
         .oALU_IN2_R(ALU_IN2_R), .oALU_IN2_I(ALU_IN2_I), .oALU_IN2_S(ALU_IN2_S), .oALU_IN2_B(ALU_IN2_B), 
-        .oALU_IN2_M(ALU_IN2_M), .oALU_IN2_A(ALU_IN2_A), .oALU_IN2_F(ALU_IN2_F),
-
-        .oALU_IN3_F(ALU_IN3_F),
+        .oALU_IN2_M(ALU_IN2_M), .oALU_IN2_A(ALU_IN2_A),
 
         .iALU_OUT_R(ALU_OUT_R), .iALU_OUT_I(ALU_OUT_I), .iALU_OUT_S(ALU_OUT_S), .iALU_OUT_U(ALU_OUT_U), .iALU_OUT_J(ALU_OUT_J),
         .iALU_OUT_M(ALU_OUT_M), .iALU_OUT_A(ALU_OUT_A), .iALU_OUT_F(ALU_OUT_F),
 
-        .oRD(RD), .oRS1(RS1), .oRS2(RS2), .oRS3(RS3),
-        .iALU_IN1(ALU_IN1), .iALU_IN2(ALU_IN2), .iALU_IN3(ALU_IN3),
-
-        .oALU_OUT(ALU_OUT)
+        .oRD(X_RD), .oRS1(X_RS1), .oRS2(X_RS2),
+        .iALU_IN1(X_ALU_IN1), .iALU_IN2(X_ALU_IN2),
+        .oALU_OUT(X_ALU_OUT)
     );
 
     instruction_r u2 (
@@ -174,9 +171,12 @@ module alu (
     rv32f_floating u11(
         .iCLK(iCLK), .iIR(IR),
     
-        .iALU_IN1(ALU_IN1_F), .iALU_IN2(ALU_IN2_F), .iALU_IN3(ALU_IN3_F),
-        .oRD(RD_F), .oRS1(RS1_F), .oRS2(RS2_F), .oRS3(RS3_F),
-        .oALU_OUT(ALU_OUT_F),
+        .iALU_IN1(F_ALU_IN1), .iALU_IN2(F_ALU_IN2), .iALU_IN3(F_ALU_IN3),
+        .oRD(F_RD), .oRS1(F_RS1), .oRS2(F_RS2), .oRS3(F_RS3),
+        .oALU_OUT(F_ALU_OUT),
+
+        .oX_RD(RD_F), .oX_RS1(RS1_F),
+        .oX_ALU_OUT(ALU_OUT_F), .iX_ALU_IN1(ALU_IN1_F),
 
         .oRAM_CE(RAM_CE_F), .oRAM_RD(RAM_RD_F), .oRAM_WR(RAM_WR_F),
         .oRAM_ADDR(RAM_ADDR_F), .iRAM_DATA(RAM_DATA_RD_F),

@@ -1,4 +1,5 @@
-`include "rtl/core/register_file.v"
+`include "rtl/core/register_file/x_register_file.v"
+`include "rtl/core/register_file/f_register_file.v"
 `include "rtl/core/alu/alu.v"
 `include "rtl/soc/ram/ram_mux.v"
 `include "rtl/core/alu/opcode_r_m.v"
@@ -29,8 +30,10 @@ module riscv32_cpu (
     reg             RAM_WR, RAM_RD;
 
     /* register file */
-    wire    [4:0]   RD, RS1, RS2, RS3;
-    wire    [31:0]  ALU_IN1, ALU_IN2, ALU_IN3, ALU_OUT;
+    wire    [4:0]   X_RD, X_RS1, X_RS2, X_RS3;                      /* xrf */
+    wire    [31:0]  X_ALU_IN1, X_ALU_IN2, X_ALU_IN3, X_ALU_OUT;
+    wire    [4:0]   F_RD, F_RS1, F_RS2, F_RS3;                      /* frf */
+    wire    [31:0]  F_ALU_IN1, F_ALU_IN2, F_ALU_IN3, F_ALU_OUT;
 
     /* branch */
     wire    [31:0]  BR_B, BR_J, BR_I;
@@ -68,23 +71,31 @@ module riscv32_cpu (
     wire   OPCODE_R_M;
     assign OPCODE_R_M = opcode_r_m_module.opcode_r_m(IR);
 
-    register_file u1 (
+    x_register_file u1 (
         .iCLK(iCLK), .iRST(iRST),
 
-        .iRD(RD), .iRS1(RS1), .iRS2(RS2), .iRS3(RS3),
-        .oALU_IN1(ALU_IN1), .oALU_IN2(ALU_IN2), .oALU_IN3(ALU_IN3), .iALU_OUT(ALU_OUT)
+        .iRD(X_RD), .iRS1(X_RS1), .iRS2(X_RS2), .iRS3(X_RS3),
+        .oALU_IN1(X_ALU_IN1), .oALU_IN2(X_ALU_IN2), .oALU_IN3(X_ALU_IN3), .iALU_OUT(X_ALU_OUT)
+    );
+
+    f_register_file u2 (
+        .iCLK(iCLK), .iRST(iRST),
+
+        .iRD(F_RD), .iRS1(F_RS1), .iRS2(F_RS2), .iRS3(F_RS3),
+        .oALU_IN1(F_ALU_IN1), .oALU_IN2(F_ALU_IN2), .oALU_IN3(F_ALU_IN3), .iALU_OUT(F_ALU_OUT)
     );
         
-    alu u2 (
+    alu u3 (
         .iCLK(iCLK), .iRST(iRST), 
         .PC(PC), .OPCODE(OPCODE), .IR(iROM_DATA),
 
-        .ALU_IN1(ALU_IN1), .ALU_IN2(ALU_IN2), .ALU_IN3(ALU_IN3), 
-        .ALU_OUT(ALU_OUT), 
+        .X_ALU_IN1(X_ALU_IN1), .X_ALU_IN2(X_ALU_IN2), .X_ALU_OUT(X_ALU_OUT), 
+        .F_ALU_IN1(F_ALU_IN1), .F_ALU_IN2(F_ALU_IN2), .F_ALU_IN3(F_ALU_IN3), .F_ALU_OUT(F_ALU_OUT), 
         
         .BR_B(BR_B), .BR_J(BR_J), .BR_I(BR_I),
 
-        .RD(RD), .RS1(RS1), .RS2(RS2), .RS3(RS3),
+        .X_RD(X_RD), .X_RS1(X_RS1), .X_RS2(X_RS2),
+        .F_RD(F_RD), .F_RS1(F_RS1), .F_RS2(F_RS2), .F_RS3(F_RS3),
 
         .RAM_CE_I(RAM_CE_I), .RAM_RD_I(RAM_RD_I), .RAM_WR_I(RAM_WR_I),
         .RAM_ADDR_I(RAM_ADDR_I), .RAM_DATA_WR_I(RAM_DATA_WR_I),
@@ -102,7 +113,7 @@ module riscv32_cpu (
         .oRAM_DATA(oRAM_DATA)
     );
 
-    ram_mux u3 (
+    ram_mux u4 (
         .iCLK(iCLK), .OPCODE(OPCODE),
 
         .iRAM_CE_I(RAM_CE_I), .iRAM_RD_I(RAM_RD_I), .iRAM_WR_I(RAM_WR_I),
@@ -137,7 +148,8 @@ module riscv32_cpu (
             PC <= 8'b0;
             i  <= 0;
         end else begin
-            $display("#clock: %0d", i);
+            $display();
+            $display("~ CLOCK: %0d ~", i);
             
             case (OPCODE)
                 7'b0110011:                               
@@ -172,6 +184,6 @@ module riscv32_cpu (
         end
     end
 
-    assign oREG32 = ALU_OUT;
+    assign oREG32 = X_ALU_OUT;
 
 endmodule
