@@ -129,14 +129,14 @@ module rv32f_floating (
 
 
     /* DEBUG */
-    always @(posedge iCLK) begin
-        if ((OPCODE == 7'b0000111) || (F_OPCODE == 1'b1)) begin
-            $display("INSTRUCTION F -> oRD: 0x%x, oRS1: 0x%x, oRS2: 0x%x, oRS3: 0x%x, oALU_OUT: 0x%x", oRD, oRS1, oRS2, oRS3, oALU_OUT);
-            $display("INSTRUCTION F -> iALU_IN1: %16.4f, iALU_IN2: %16.4f, iALU_IN3: %16.4f", iALU_IN1, iALU_IN2, iALU_IN3);
-            $display("INSTRUCTION F -> oRAM_CE: 0x%x, oRAM_RD: 0x%x, oRAM_WR: 0x%x, oRAM_ADDR: 0x%x", oRAM_CE, oRAM_RD, oRAM_WR, oRAM_ADDR);
-            $display("INSTRUCTION F -> iRAM_DATA: 0x%x, oRAM_DATA: 0x%x", iRAM_DATA, oRAM_DATA);
-        end
-    end
+    // always @(posedge iCLK) begin
+    //     if ((OPCODE == 7'b0000111) || (F_OPCODE == 1'b1)) begin
+    //         $display("INSTRUCTION F -> oRD: 0x%x, oRS1: 0x%x, oRS2: 0x%x, oRS3: 0x%x, oALU_OUT: 0x%x", oRD, oRS1, oRS2, oRS3, oALU_OUT);
+    //         $display("INSTRUCTION F -> iALU_IN1: %16.4f, iALU_IN2: %16.4f, iALU_IN3: %16.4f", iALU_IN1, iALU_IN2, iALU_IN3);
+    //         $display("INSTRUCTION F -> oRAM_CE: 0x%x, oRAM_RD: 0x%x, oRAM_WR: 0x%x, oRAM_ADDR: 0x%x", oRAM_CE, oRAM_RD, oRAM_WR, oRAM_ADDR);
+    //         $display("INSTRUCTION F -> iRAM_DATA: 0x%x, oRAM_DATA: 0x%x", iRAM_DATA, oRAM_DATA);
+    //     end
+    // end
 
 
 endmodule

@@ -51,12 +51,12 @@ module instruction_cb (
 
 
     /* DEBUG */
-    always @(posedge iCLK) begin
-        if ((iIR[1:0] != 2'b11) && (C_MUX == 3'b110)) begin
-            $display("INSTRUCTION CB -> iPC: 0x%x, iRS: 0x%x", iPC, iRS);
-            $display("INSTRUCTION CB -> oRD: 0x%x, oRS: 0x%x, oALU_OUT: 0x%x, oPC: 0x%x", oRD, oRS, oALU_OUT, oPC);
-        end
-    end
+    // always @(posedge iCLK) begin
+    //     if ((iIR[1:0] != 2'b11) && (C_MUX == 3'b110)) begin
+    //         $display("INSTRUCTION CB -> iPC: 0x%x, iRS: 0x%x", iPC, iRS);
+    //         $display("INSTRUCTION CB -> oRD: 0x%x, oRS: 0x%x, oALU_OUT: 0x%x, oPC: 0x%x", oRD, oRS, oALU_OUT, oPC);
+    //     end
+    // end
 
 
 endmodule

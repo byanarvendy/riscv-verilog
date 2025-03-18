@@ -113,8 +113,6 @@ module instruction_mux(
                                  5'h0)                                                                                  :
                             5'h0;
 
-    assign oRS3         =   ((iIR[1:0] == 2'b11) && (F_OPCODE == 1'b1)) ? iRS3_F : 5'h0;
-
     assign oALU_OUT     =   (iIR[1:0] == 2'b11) ?
                                 ((OPCODE == 7'b0110011) ?
                                     ((OPCODE_R_M == 1'b0) ? iALU_OUT_R                                                   : 

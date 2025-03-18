@@ -267,7 +267,7 @@ module riscv32_cpu (
 
 
             /* DEBUG */
-            $display("CPU -> PC: 0x%x, IR: 0x%x, IR_C: 0x%x, CURRENT_INSTRUCTION: 0x%x, C_BUFFER: 1b%b", PC, IR, IR_C, CURRENT_INSTRUCTION, C_BUFFER);
+            // $display("CPU -> PC: 0x%x, IR: 0x%x, IR_C: 0x%x, CURRENT_INSTRUCTION: 0x%x, C_BUFFER: 1b%b", PC, IR, IR_C, CURRENT_INSTRUCTION, C_BUFFER);
 
 
         end

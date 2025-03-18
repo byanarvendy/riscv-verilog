@@ -65,10 +65,10 @@ _start:
 
 
     # # float
-    # flw f4, 0(x1)
-    # fsw f1, 16(x2)
+    flw f4, 0(x1)
+    fsw f1, 16(x2)
 
-    # fmadd.s f3, f0, f1, f2  
+    fmadd.s f3, f0, f1, f2  
     # fmsub.s f4, f1, f2, f3  
     # # fnmadd.s f5, f4, f5, f6 
     # fnmsub.s f6, f7, f8, f9 
@@ -154,9 +154,9 @@ _start:
     # amomin.w x8, x9, (x8)
 
     # Branch Instructions
-    # beq x1, x2, 12
-    # bne x1, x2, 16
-    # blt x1, x2, 20
+    beq x1, x2, 12
+    bne x1, x2, 16
+    blt x1, x2, 20
     # bge x1, x2, 24
     # bltu x1, x2, 28
     # bgeu x1, x2, 32

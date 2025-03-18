@@ -47,13 +47,13 @@ module instruction_css (
 
 
     /* DEBUG */
-    always @(posedge iCLK) begin
-        if ((iIR[1:0] != 2'b11) && (C_MUX == 3'b010)) begin
-            $display("INSTRUCTION CSS -> oRS1: 0x%x, oRS2: 0x%x", oRS1, oRS2);
-            $display("INSTRUCTION CSS -> iRS1: 0x%x, iRS2: 0x%x", iRS1, iRS2);
-            $display("INSTRUCTION CSS -> oRAM_CE: 0x%x, oRAM_RD: 0x%x, oRAM_WR: 0x%x, oRAM_ADDR: 0x%x, oRAM_DATA: 0x%x", oRAM_CE, oRAM_RD, oRAM_WR, oRAM_ADDR, oRAM_DATA);
-        end
-    end
+    // always @(posedge iCLK) begin
+    //     if ((iIR[1:0] != 2'b11) && (C_MUX == 3'b010)) begin
+    //         $display("INSTRUCTION CSS -> oRS1: 0x%x, oRS2: 0x%x", oRS1, oRS2);
+    //         $display("INSTRUCTION CSS -> iRS1: 0x%x, iRS2: 0x%x", iRS1, iRS2);
+    //         $display("INSTRUCTION CSS -> oRAM_CE: 0x%x, oRAM_RD: 0x%x, oRAM_WR: 0x%x, oRAM_ADDR: 0x%x, oRAM_DATA: 0x%x", oRAM_CE, oRAM_RD, oRAM_WR, oRAM_ADDR, oRAM_DATA);
+    //     end
+    // end
 
 
 endmodule

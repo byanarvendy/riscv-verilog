@@ -130,10 +130,10 @@ module ram_mux (
 
 
 	/* DEBUG */
-	always @(posedge iCLK) begin
-		$display("RAM MUX -> oRAM_CE: 0x%x, oRAM_RD: 0x%x, oRAM_WR: 0x%x", oRAM_CE, oRAM_RD, oRAM_WR);
-		$display("RAM MUX -> oRAM_ADDR: 0x%x, oRAM_DATA_WR: 0x%x, iRAM_DATA_RD: 0x%x", oRAM_ADDR, oRAM_DATA_WR, iRAM_DATA_RD);
-	end
+	// always @(posedge iCLK) begin
+	// 	$display("RAM MUX -> oRAM_CE: 0x%x, oRAM_RD: 0x%x, oRAM_WR: 0x%x", oRAM_CE, oRAM_RD, oRAM_WR);
+	// 	$display("RAM MUX -> oRAM_ADDR: 0x%x, oRAM_DATA_WR: 0x%x, iRAM_DATA_RD: 0x%x", oRAM_ADDR, oRAM_DATA_WR, iRAM_DATA_RD);
+	// end
 
 
 endmodule

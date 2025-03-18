@@ -34,11 +34,11 @@ module instruction_ciw (
 
 
     /* DEBUG */
-    always @(posedge iCLK) begin
-        if ((iIR[1:0] != 2'b11) && (C_MUX == 3'b011)) begin
-            $display("INSTRUCTION CIW -> iRS: 0x%x, oRS: 0x%x, oRD: 0x%x, oALU_OUT: 0x%x", iRS, oRS, oRD, oALU_OUT);
-        end
-    end
+    // always @(posedge iCLK) begin
+    //     if ((iIR[1:0] != 2'b11) && (C_MUX == 3'b011)) begin
+    //         $display("INSTRUCTION CIW -> iRS: 0x%x, oRS: 0x%x, oRD: 0x%x, oALU_OUT: 0x%x", iRS, oRS, oRD, oALU_OUT);
+    //     end
+    // end
 
 
 endmodule

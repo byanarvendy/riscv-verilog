@@ -48,12 +48,12 @@ module rv32m_multiply (
 
 
     /* DEBUG */
-    always @(posedge iCLK) begin
-        if ((iIR[6:0] == 7'b0110011) && (OPCODE_R_M == 1'b1)) begin
-            $display("INSTRUCTION M -> oRD: 0x%x, oRS1: 0x%x, oRS2: 0x%x, oALU_OUT: 0x%x", oRD, oRS1, oRS2, oALU_OUT);
-            $display("INSTRUCTION M -> iALU_IN1: 0x%x, iALU_IN2: 0x%x", iALU_IN1, iALU_IN2);
-        end
-    end
+    // always @(posedge iCLK) begin
+    //     if ((iIR[6:0] == 7'b0110011) && (OPCODE_R_M == 1'b1)) begin
+    //         $display("INSTRUCTION M -> oRD: 0x%x, oRS1: 0x%x, oRS2: 0x%x, oALU_OUT: 0x%x", oRD, oRS1, oRS2, oALU_OUT);
+    //         $display("INSTRUCTION M -> iALU_IN1: 0x%x, iALU_IN2: 0x%x", iALU_IN1, iALU_IN2);
+    //     end
+    // end
 
 
 endmodule

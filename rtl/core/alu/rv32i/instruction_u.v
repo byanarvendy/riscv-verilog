@@ -23,11 +23,11 @@ module instruction_u (
 
 
     /* DEBUG */
-    always @(posedge iCLK) begin
-        if (opcode == 7'b0110111 || opcode == 7'b0010111) begin
-            $display("INSTRUCTION U -> iPC: 0x%x, oRD: 0x%x, oREG_IN: 0x%x", iPC, oRD, oREG_IN);
-        end
-    end
+    // always @(posedge iCLK) begin
+    //     if (opcode == 7'b0110111 || opcode == 7'b0010111) begin
+    //         $display("INSTRUCTION U -> iPC: 0x%x, oRD: 0x%x, oREG_IN: 0x%x", iPC, oRD, oREG_IN);
+    //     end
+    // end
 
     
 endmodule

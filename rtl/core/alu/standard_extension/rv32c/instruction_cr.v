@@ -40,12 +40,12 @@ module instruction_cr (
 
 
     /* DEBUG */
-    always @(posedge iCLK) begin
-        if ((iIR[1:0] != 2'b11) && (C_MUX == 3'b000)) begin
-            $display("INSTRUCTION CR -> iRS1: 0x%x, iRS2: 0x%x, oRS1: 0x%x, oRS2: 0x%x", iRS1, iRS2, oRS1, oRS2);
-            $display("INSTRUCTION CR -> oALU_OUT: 0x%x, oRD: 0x%x, oPC: 0x%x", oALU_OUT, oRD, oPC);
-        end
-    end
+    // always @(posedge iCLK) begin
+    //     if ((iIR[1:0] != 2'b11) && (C_MUX == 3'b000)) begin
+    //         $display("INSTRUCTION CR -> iRS1: 0x%x, iRS2: 0x%x, oRS1: 0x%x, oRS2: 0x%x", iRS1, iRS2, oRS1, oRS2);
+    //         $display("INSTRUCTION CR -> oALU_OUT: 0x%x, oRD: 0x%x, oPC: 0x%x", oALU_OUT, oRD, oPC);
+    //     end
+    // end
     
 
 endmodule

@@ -138,8 +138,6 @@ module alu (
         .oRD(X_RD), .oRS1(X_RS1), .oRS2(X_RS2),
         .iALU_IN1(X_ALU_IN1), .iALU_IN2(X_ALU_IN2),
         .oALU_OUT(X_ALU_OUT)
-
-        .oALU_OUT(ALU_OUT)
     );
 
     instruction_r u2 (

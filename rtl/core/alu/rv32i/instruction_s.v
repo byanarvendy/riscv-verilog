@@ -63,14 +63,14 @@ module instruction_s (
     
 
     /* DEBUG */
-    always @(posedge iCLK) begin
-        if (iIR[6:0] == 7'b0100011) begin
-            $display("INSTRUCTION S -> oRD: 0x%x, oRS1: 0x%x, oRS2: 0x%x, oREG_IN: 0x%x", oRD, oRS1, oRS2, oREG_IN);
-            $display("INSTRUCTION S -> iREG_OUT1: 0x%x, iREG_OUT2: 0x%x", iREG_OUT1, iREG_OUT2);
-            $display("INSTRUCTION S -> oRAM_CE: 0x%x, oRAM_RD: 0x%x, oRAM_WR: 0x%x, oRAM_ADDR: 0x%x", oRAM_CE, oRAM_RD, oRAM_WR, oRAM_ADDR);
-            $display("INSTRUCTION S -> iRAM_DATA: 0x%x, oRAM_DATA: 0x%x", iRAM_DATA, oRAM_DATA);
-        end
-    end
+    // always @(posedge iCLK) begin
+    //     if (iIR[6:0] == 7'b0100011) begin
+    //         $display("INSTRUCTION S -> oRD: 0x%x, oRS1: 0x%x, oRS2: 0x%x, oREG_IN: 0x%x", oRD, oRS1, oRS2, oREG_IN);
+    //         $display("INSTRUCTION S -> iREG_OUT1: 0x%x, iREG_OUT2: 0x%x", iREG_OUT1, iREG_OUT2);
+    //         $display("INSTRUCTION S -> oRAM_CE: 0x%x, oRAM_RD: 0x%x, oRAM_WR: 0x%x, oRAM_ADDR: 0x%x", oRAM_CE, oRAM_RD, oRAM_WR, oRAM_ADDR);
+    //         $display("INSTRUCTION S -> iRAM_DATA: 0x%x, oRAM_DATA: 0x%x", iRAM_DATA, oRAM_DATA);
+    //     end
+    // end
 
 
 endmodule

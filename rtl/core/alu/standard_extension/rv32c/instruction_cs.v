@@ -61,13 +61,13 @@ module instruction_cs (
 
 
     /* DEBUG */
-    always @(posedge iCLK) begin
-        if ((iIR[1:0] != 2'b11) && (C_MUX == 3'b101)) begin
-            $display("INSTRUCTION CS -> oRD: 0x%x, oRS1: 0x%x, oRS2: 0x%x, oALU_OUT: 0x%x", oRD, oRS1, oRS2, oALU_OUT);
-            $display("INSTRUCTION CS -> iRS1: 0x%x, iRS2: 0x%x", iRS1, iRS2);
-            $display("INSTRUCTION CS -> oRAM_CE: 0x%x, oRAM_RD: 0x%x, oRAM_WR: 0x%x, oRAM_ADDR: 0x%x, oRAM_DATA: 0x%x", oRAM_CE, oRAM_RD, oRAM_WR, oRAM_ADDR, oRAM_DATA);
-        end
-    end
+    // always @(posedge iCLK) begin
+    //     if ((iIR[1:0] != 2'b11) && (C_MUX == 3'b101)) begin
+    //         $display("INSTRUCTION CS -> oRD: 0x%x, oRS1: 0x%x, oRS2: 0x%x, oALU_OUT: 0x%x", oRD, oRS1, oRS2, oALU_OUT);
+    //         $display("INSTRUCTION CS -> iRS1: 0x%x, iRS2: 0x%x", iRS1, iRS2);
+    //         $display("INSTRUCTION CS -> oRAM_CE: 0x%x, oRAM_RD: 0x%x, oRAM_WR: 0x%x, oRAM_ADDR: 0x%x, oRAM_DATA: 0x%x", oRAM_CE, oRAM_RD, oRAM_WR, oRAM_ADDR, oRAM_DATA);
+    //     end
+    // end
 
 
 endmodule

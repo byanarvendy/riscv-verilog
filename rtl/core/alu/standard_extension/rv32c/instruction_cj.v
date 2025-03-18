@@ -37,11 +37,11 @@ module instruction_cj (
 
 
     /* DEBUG */
-    always @(posedge iCLK) begin
-        if ((iIR[1:0] != 2'b11) && (C_MUX == 3'b111)) begin
-            $display("INSTRUCTION CJ -> iPC: 0x%x, oRD: 0x%x, oALU_OUT: 0x%x, oPC: 0x%x,", iPC, oRD, oALU_OUT, oPC);
-        end
-    end
+    // always @(posedge iCLK) begin
+    //     if ((iIR[1:0] != 2'b11) && (C_MUX == 3'b111)) begin
+    //         $display("INSTRUCTION CJ -> iPC: 0x%x, oRD: 0x%x, oALU_OUT: 0x%x, oPC: 0x%x,", iPC, oRD, oALU_OUT, oPC);
+    //     end
+    // end
 
 
 endmodule

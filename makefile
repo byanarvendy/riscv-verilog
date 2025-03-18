@@ -21,10 +21,10 @@ ass_elf = $(dir_code)/$(code).elf
 ass_bin = $(dir_code)/$(code).bin
 ass_hex = $(dir_mem)/memory_rom_init.hex
 
-RISCV_AS 		= riscv32-unknown-elf-as
-RISCV_GCC 		= riscv32-unknown-elf-gcc
-RISCV_LD 		= riscv32-unknown-elf-ld
-RISCV_OBJCOPY 	= riscv32-unknown-elf-objcopy
+RISCV_AS 		= riscv64-unknown-elf-as
+RISCV_GCC 		= riscv64-unknown-elf-gcc
+RISCV_LD 		= riscv64-unknown-elf-ld
+RISCV_OBJCOPY 	= riscv64-unknown-elf-objcopy
 HEXDUMP 		= hexdump
 
 vvp:
